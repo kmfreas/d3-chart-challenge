@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { getData } from './api';
+import { createChart } from './chart';
 
 class App extends Component {
+  state = {
+    data: [],
+    svg: null,
+  }
+
+  componentDidMount() {
+    getData().then((data) => {
+      this.setState({
+        data,
+      }, () => createChart(this.svg.id, this.state.data));
+    });
+  }
+
+  id = data => data.id;
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <svg ref={(elm) => this.svg = elm} id="chart">
+        </svg>
       </div>
     );
   }
